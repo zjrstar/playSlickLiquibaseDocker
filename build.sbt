@@ -1,5 +1,3 @@
-
-import com.typesafe.sbt.SbtNativePackager.autoImport._
 import com.github.sbtliquibase.Import._
 import com.github.sbtliquibase.SbtLiquibase
 import com.typesafe.sbt.digest.Import._
@@ -10,7 +8,7 @@ name := """play-scala-slick-liquibase-angular-docker"""
 
 version := "1.0-SNAPSHOT"
 
-lazy val root = (project in file(".")).enablePlugins(PlayScala).enablePlugins(SbtLiquibase)
+lazy val root = (project in file(".")).enablePlugins(PlayScala).enablePlugins(SbtLiquibase).enablePlugins(sbtdocker.DockerPlugin)
 
 scalaVersion := "2.11.7"
 
@@ -31,6 +29,7 @@ libraryDependencies ++= Seq(
   "com.typesafe.slick" %% "slick" % "3.1.1",
   "com.typesafe.slick" %% "slick-codegen" % "3.1.1",
   "com.typesafe.slick" %% "slick-hikaricp" % "3.1.1",
+  "org.liquibase" % "liquibase-core" % "3.1.1",
   "org.slf4j" % "slf4j-nop" % "1.6.4",
   "com.zaxxer" % "HikariCP" % "2.4.7",
   "mysql" % "mysql-connector-java" % "5.1.31",
@@ -43,13 +42,13 @@ lazy val dbHost = System.getProperty("DB_HOST", "127.0.0.1")
 
 lazy val dbPort = System.getProperty("DB_PORT", "3306")
 
-val dbName: String = "sampledb"
+val dbName: String = System.getProperty("DB_NAME", "sampledb")
 
 val jdbcUrl: String = s"jdbc:mysql://${dbHost}:${dbPort}/${dbName}?noAccessToProcedureBodies=true&createDatabaseIfNotExist=true"
 
-lazy val jdbcUser = System.getProperty("JDBC_USER", "root")
+lazy val jdbcUser = System.getProperty("DB_USER", "root")
 
-lazy val jdbcPassword = System.getProperty("JDBC_PASSWORD", "1q2w3e4r5t")
+lazy val jdbcPassword = System.getProperty("DB_PASSWORD", "1q2w3e4r5t")
 
 val jdbcDriver: String = "com.mysql.jdbc.Driver"
 
@@ -127,10 +126,37 @@ sources in (Compile,doc) := Seq.empty
 
 //For Dockerization
 // setting a maintainer which is used for all packaging types
-maintainer := "Barry Zhong"
+//maintainer := "Barry Zhong"
 
 // exposing the play ports
-dockerExposedPorts in Docker := Seq(9000, 9443)
+//dockerExposedPorts in Docker := Seq(9000, 9443)
 
 
-dockerBaseImage := "zhongdj/jdk8-min"
+dockerfile in docker := {
+  val appDir: File = stage.value
+  val targetDir = new File("/opt/app")
+  println("stage folder: " + appDir.getAbsolutePath)
+  val startScriptSource: File = baseDirectory.value / "dockerization" / "start.sh"
+  val startScriptTarget: File = new File((dockerPath in docker).value, "start.sh")
+  startScriptSource.setExecutable(true)
+  startScriptTarget.setExecutable(true)
+
+  println("startScriptTarget: " + startScriptTarget.getAbsolutePath)
+
+  sbt.IO.copyFile(startScriptSource,  startScriptTarget , true)
+
+  val migrationSource: File = baseDirectory.value / "migration"
+  val migrationTarget: File = new File((dockerPath in docker).value,  "migration")
+
+  sbt.IO.copyDirectory(migrationSource,  migrationTarget , true, true)
+
+  new Dockerfile {
+    from("java")
+    maintainer("Barry Zhong")
+    copy(appDir, targetDir)
+    copy(startScriptTarget, targetDir / "start.sh")
+    copy(migrationTarget, targetDir / "migration")
+    workDir(targetDir.getAbsolutePath)
+    entryPoint("sh", "start.sh")
+  }
+}

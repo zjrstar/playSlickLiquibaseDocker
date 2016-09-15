@@ -8,7 +8,7 @@ resolvers += "Typesafe Repository" at "https://repo.typesafe.com/typesafe/maven-
 //Docker
 resolvers += "Xerial repository" at "http://repo1.maven.org/maven2/org/xerial/sbt/"
 
-addSbtPlugin("se.marcuslonnberg" % "sbt-docker" % "1.3.0")
+addSbtPlugin("se.marcuslonnberg" % "sbt-docker" % "1.4.0")
 
 addSbtPlugin("com.typesafe.sbt" % "sbt-native-packager" % "0.8.0-RC2")
 

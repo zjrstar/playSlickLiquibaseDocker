@@ -1,0 +1,42 @@
+version: "2"
+services:
+  play.server:
+    container_name : play.server 
+    image : play-scala-slick-liquibase-angular-docker/play-scala-slick-liquibase-angular-docker:latest
+    environment: 
+      - DB_HOST=mysql.server
+      - DB_PORT=3306
+      - DB_NAME=playdb
+      - DB_DIRVER=com.mysql.jdbc.Driver
+      - DB_USER=root
+      - DB_PASSWORD=1q2w3e4r5t
+      - JDBC_USER=root
+      - JDBC_PASSWORD=1q2w3e4r5t
+      - ONLINE_SCHEMA_CHANGE=true
+    volumes:
+      - "/etc/localtime:/etc/localtime:ro"
+    tmpfs: 
+      - /tmp
+    network_mode: backend
+    ports:
+      - "9000:9000"
+      - "9443:9443"
+    depends_on:
+      - mysql.server
+
+  mysql.server:
+    container_name : mysql.server
+    image: percona:latest
+    volumes:
+     - "~/docker/volumes/etc/mysql/auth/conf.d:/etc/mysql/conf.d"
+     - "~/docker/volumes/var/log/auth/mysql:/var/log/mysql"
+     - "~/docker/volumes/var/lib/auth/mysql:/var/lib/mysql"
+     - "~/docker/volumes/var/run/auth/mysqld:/var/run/mysqld"
+     - "/etc/localtime:/etc/localtime:ro"
+    tmpfs:
+     - /tmp
+    environment:
+     - MYSQL_ROOT_PASSWORD=1q2w3e4r5t
+    network_mode: backend
+    ports:
+     - 33306:3306   

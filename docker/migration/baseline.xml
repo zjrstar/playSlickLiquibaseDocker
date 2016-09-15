@@ -1,0 +1,39 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<databaseChangeLog xmlns="http://www.liquibase.org/xml/ns/dbchangelog"
+                   xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+                   xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-3.1.xsd">
+    <changeSet id="create user table" author="Barry">
+        <createTable tableName="tbluser">
+            <column name="id" autoIncrement="true" type="INT(11)">
+                <constraints primaryKey="true"/>
+            </column>
+            <column name="email" type="VARCHAR(200)">
+                <constraints unique="true" nullable="false"/>
+            </column>
+            <column name="name" type="VARCHAR(100)">
+                <constraints nullable="false"/>
+            </column>
+            <column name="pass_phrase" type="CHAR(32)">
+                <constraints nullable="false"/>
+            </column>
+            <column name="salt" type="CHAR(36)">
+                <constraints nullable="false"/>
+            </column>
+            <column name="failed_login_attempts" type="INT(4)">
+                <constraints nullable="true"/>
+            </column>
+            <column name="role" type="VARCHAR(50)" encoding="UTF8"/>
+            <column name="last_login" type="TIMESTAMP">
+                <constraints nullable="true"/>
+            </column>
+            <column name="created_on" type="TIMESTAMP" defaultValueComputed="CURRENT_TIMESTAMP">
+                <constraints nullable="false"/>
+            </column>
+            <column name="created_by" type="INT(11)"/>
+            <column name="last_modified_on" type="TIMESTAMP" defaultValueComputed="CURRENT_TIMESTAMP">
+                <constraints nullable="false"/>
+            </column>
+            <column name="last_modified_by" type="INT(11)"/>
+        </createTable>
+    </changeSet>
+</databaseChangeLog>

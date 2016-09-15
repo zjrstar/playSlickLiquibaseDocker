@@ -1,0 +1,144 @@
+<div class="page-header">
+    <h1>管理员面板</h1>
+</div>
+<section>
+    <ul class="nav nav-pills">
+        <li ng-class="{ active: isSelected(1) } ">
+            <a href ng-click="selectTab(1)">添加用户</a>
+        </li>
+        <li ng-class="{ active: isSelected(2) } ">
+            <a href ng-click="selectTab(2)">查询用户</a>
+        </li>
+    </ul>
+    <br/>
+
+    <div class="panel" ng-show="isSelected(1)">
+        <form name="form">
+            <fieldset>
+                <div class="form-group">
+                    <input type="text" class="form-control" data-ng-model="newUser.name" placeholder="用户名"
+                           required/><br/>
+                </div>
+                <div class="form-group">
+                    <input type="text" class="form-control" data-ng-model="newUser.email" placeholder="邮箱"
+                           required/><br/>
+                </div>
+                <div class="form-group">
+                    <select class="form-control" data-ng-model="newUser.role">
+                        <option value="SystemAuditor" selected="true">System Auditor</option>
+                        <option value="admin">Admin</option>
+                        <option value="InitialAuditor">Initial Auditor</option>
+                        <option value="Business">Business</option>
+                        <option value="CreditAuditor">Credit Auditor</option>
+                        <option value="Processor">Processor</option>
+                    </select>
+                </div>
+                <div class="form-group">
+                    <input type="password" class="form-control" data-ng-model="newUser.password" placeholder="密码"
+                           required/><br/>
+                    <button class="btn btn-primary" data-ng-disabled="form.$invalid"
+                            data-ng-click="createUser(newUser)">创建用户
+                    </button>
+                </div>
+                <div>
+                    <em>结果如下：</em><br/>
+                    <label id="result">{{result}}</label>
+                </div>
+            </fieldset>
+        </form>
+    </div>
+    <div class="panel panel-default" ng-show="isSelected(2)">
+        <!-- Default panel contents -->
+        <div class="panel-heading">用户列表</div>
+        <!-- Table -->
+        <table class="table">
+            <tr>
+                <th>#</th>
+                <th>用户名</th>
+                <th>邮箱</th>
+                <th>角色</th>
+                <th>创建时间</th>
+                <th>操作</th>
+            </tr>
+            <tr ng-repeat="user in users" ng-click="selectUser($index)" ng-class="{selected: $index == selectedRow}">
+                <td>
+                    <label>{{user.id}}</label>
+                </td>
+                <td>
+                    <label ng-hide="!showEdit">{{user.name}}</label>
+                    <input class="form-control" type="text" id='txt_name_{{user.id}}' ng-model="user.name"
+                           class="inactive" ng-show="!showEdit"/>
+                </td>
+                <td>
+                    <label ng-hide="!showEdit">{{user.email}}</label>
+                    <input class="form-control" type="text" id='txt_email_{{user.id}}' ng-model="user.email"
+                           class="inactive" ng-show="!showEdit"/>
+                </td>
+                <td>
+                    <label ng-hide="!showEdit">{{user.role}}</label>
+                    <select class="form-control" data-ng-model="user.role" ng-show="!showEdit">
+                        <option value="SystemAuditor" selected="true">System Auditor</option>
+                        <option value="admin">Admin</option>
+                        <option value="InitialAuditor">Initial Auditor</option>
+                        <option value="Business">Business</option>
+                        <option value="CreditAuditor">Credit Auditor</option>
+                        <option value="Processor">Processor</option>
+                    </select>
+                </td>
+                <td>
+                    <label>{{user.createdAt | date : 'yyyy-MM-dd hh:mm:ss'}}</label>
+                </td>
+                <td>
+                    <edit ng-Model="user" ng-show="showEdit"><a>编辑</a></edit>
+                    <update ng-Model="user" ng-show="!showEdit"><a>更新</a></update>
+                    <cancel ng-Model="user" ng-show="!showEdit"> | <a>取消</a></cancel>
+                    |
+                    <delete ng-Model="user"><a>删除</a></delete>
+                </td>
+            </tr>
+        </table>
+    </div>
+    <div class="panel panel-default" ng-show="isSelected(3)">
+        <!-- Default panel contents -->
+        <div class="panel-heading">用户信用查询列表</div>
+        <!-- Table -->
+        <table class="table">
+            <tr>
+                <th>#</th>
+                <th>用户名</th>
+                <th>本地/远程</th>
+                <th>客户姓名</th>
+                <th>身份证号</th>
+                <th>电话号码</th>
+                <th>查询时间</th>
+            </tr>
+            <tr ng-repeat="queryLog in queryLogs">
+                <td>
+                    <label>{{queryLog.id}}</label>
+                </td>
+                <td>
+                    <label>{{queryLog.userName}}</label>
+                </td>
+                <td>
+                    <label>{{queryLog.method}}</label>
+                </td>
+                <td>
+                    <label>{{queryLog.customerName}}</label>
+                </td>
+                <td>
+                    <label>{{queryLog.customerCardNumber}}</label>
+                </td>
+                <td>
+                    <label>{{queryLog.customerPhoneNumber}}</label>
+                </td>
+                <td>
+                    <label>{{queryLog.createdAt | date : 'yyyy-MM-dd hh:mm:ss'}}</label>
+                </td>
+            </tr>
+        </table>
+        <div class="panel-heading" ng-show="hasMore">
+            <button class="btn btn-primary" data-ng-click="showMore()">显示更多</button>
+        </div>
+
+    </div>
+</section>

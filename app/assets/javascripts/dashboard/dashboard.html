@@ -1,0 +1,102 @@
+<div class="page-header">
+    <h1>工具箱</h1>
+</div>
+<section>
+    <ul class="nav nav-pills">
+        <li ng-class="{ active: isSelected(1) } ">
+            <a href ng-click="selectTab(1)">身份证查询</a>
+        </li>
+        <li ng-class="{ active: isSelected(2) } ">
+            <a href ng-click="selectTab(2)">手机号查询</a>
+        </li>
+        <li ng-class="{ active: isSelected(3) } ">
+            <a href ng-click="selectTab(3)">使用量查询</a>
+        </li>
+        <li ng-class="{ active: isSelected(4) } ">
+            <a href ng-click="selectTab(4)">组合查询</a>
+        </li>
+    </ul>
+    <br/>
+    <div class="panel" ng-show="isSelected(1)">
+        <form name="form">
+            <fieldset>
+                <div class="form-group">
+                    <input type="text" class="form-control" data-ng-model="creditQuery.name" placeholder="姓名" required/><br/>
+                </div>
+                <div class="form-group">
+                    <input type="text" class="form-control" data-ng-model="creditQuery.idNumber" placeholder="身份证号"
+                           required/><br/>
+                    <button class="btn btn-primary" data-ng-disabled="form.$invalid"
+                            data-ng-click="executeQuery(creditQuery)">查询
+                    </button>
+                </div>
+                <div>
+                    <em>结果如下：</em><br/>
+                    <label id="result">{{result}}</label>
+                </div>
+            </fieldset>
+        </form>
+    </div>
+    <div class="panel" ng-show = "isSelected(2)">
+       <form name = "mobilePhoneQueryForm">
+           <fieldset>
+               <div class="form-group">
+                   <input type="text" class ="form-control" data-ng-model="mobilePhone" placeholder="手机号" required><br/>
+                   <button class="btn btn-primary" data-ng-disabled="mobilePhoneQueryForm.$invalid"
+                       data-ng-click="executeMobilePhoneQuery(mobilePhone)">查询
+                   </button>
+               </div>
+               <div>
+                   <em>结果如下：</em><br/>
+                   <label id="score">Score: {{mobilePhoneQueryResult.score}}</label><br/>
+                   <label id="tag1">tag1: {{mobilePhoneQueryResult.tag1}}</label><br/>
+                   <label id="tag2">tag2: {{mobilePhoneQueryResult.tag2}}</label><br/>
+                   <label id="tag3">tag3: {{mobilePhoneQueryResult.tag3}}</label><br/>
+               </div>
+           </fieldset>
+       </form>
+    </div>
+    <div class="panel" ng-show = "isSelected(3)">
+        <button class="btn btn-primary" data-ng-click="executeCreditUsageQuery()">查询</button><br>
+        <div>
+            <em>结果如下：</em><br/>
+            <label id="usage_name">姓名：{{creditUsageResult.name}}</label><br />
+            <label id="usage_email">邮箱：{{creditUsageResult.email}}</label><br />
+            <label id="usage_identityQueriesCount">身份查询次数：{{creditUsageResult.identityQueriesCount}}</label><br />
+            <label id="usage_comboQueriesCount">组合查询次数：{{creditUsageResult.comboQueriesCount}}</label><br />
+            <label id="usage_scoreQueriesCount">分数查询次数：{{creditUsageResult.scoreQueriesCount}}</label><br />
+        </div>
+    </div>
+    <div class="panel" ng-show = "isSelected(4)">
+        <form name = "compoundCheckForm">
+            <fieldset>
+                <div class="form-group">
+                    <input type="text" class="form-control" data-ng-model="compoundCheck.name" placeholder="姓名" required><br/>
+                </div>
+                <div class="form-group">
+                    <input type="text" class="form-control" data-ng-model="compoundCheck.idNumber" placeholder="身份证号" required><br/>
+                </div>
+                <div class="form-group">
+                    <input type="text" class ="form-control" data-ng-model="compoundCheck.mobile" placeholder="手机号" required><br/>
+                    <button class="btn btn-primary" data-ng-disabled="compoundCheckForm.$invalid"
+                            data-ng-click="executeCompoundCheckLocal(compoundCheck)">本地查询
+                    </button>
+                    <button class="btn btn-primary" data-ng-disabled="compoundCheckForm.$invalid"
+                            data-ng-click="executeCompoundCheckRemote(compoundCheck)">付费查询
+                    </button>
+                </div>
+                <div>
+                    <em>结果如下：</em><br/>
+                    <label>姓名：{{compoundCheckResult.name}}</label><br/>
+                    <label>身份证号：{{compoundCheckResult.idNumber}}</label><br/>
+                    <label>状态：{{compoundCheckResult.idStatus}}</label><br/>
+                    <label>Score：{{compoundCheckResult.score}}</label><br/>
+                    <label>tag1：{{compoundCheckResult.tag1}}</label><br/>
+                    <label>tag2：{{compoundCheckResult.tag2}}</label><br/>
+                    <label>tag3：{{compoundCheckResult.tag3}}</label><br/>
+                    <label>更新时间：{{compoundCheckResult.lastModifiedOn | date : 'yyyy-MM-dd hh:mm:ss'}}</label><br/>
+                </div>
+            </fieldset>
+        </form>
+    </div>
+</section>

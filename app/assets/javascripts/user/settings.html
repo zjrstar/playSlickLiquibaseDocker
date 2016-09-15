@@ -1,0 +1,51 @@
+<div class="page-header">
+    <h1>配置面板</h1>
+</div>
+<section>
+    <ul class="nav nav-pills">
+        <li ng-class="{ active: isSelected(1) } ">
+            <a href ng-click="selectTab(1)">密码修改</a>
+        </li>
+    </ul>
+    <br/>
+
+    <div class="panel" ng-show="isSelected(1)">
+        <form name="form">
+            <fieldset>
+                <div class="form-group">
+                    <input type="password" class="form-control" id="oldPwd" name="oldPwd" data-ng-model="oldPwd" placeholder="原密码"
+                           required old-pwd-check="oldPwd"/>
+                    <div class="msg-block" ng-show="form.$error">
+                      <span class="msg-error" ng-show="form.oldPwd.$error.oldPwdMatch">
+                        原密码不正确，请重新输入！
+                      </span>
+                    </div>
+                    <br/>
+                </div>
+                <div class="form-group">
+                    <input type="password" class="form-control" id="pw1" name="pw1" data-ng-model="pw1" placeholder="输入新密码"
+                           required/><br/>
+                </div>
+                <div class="form-group">
+                    <input type="password" class="form-control" id="pw2" name="pw2" data-ng-model="pw2" placeholder="再一次输入新密码"
+                           required pw-check="pw1"/>
+                    <div class="msg-block" ng-show="form.$error">
+                      <span class="msg-error" ng-show="form.pw2.$error.pwmatch">
+                        两次输入的新密码不一致，请重新输入！
+                      </span>
+                    </div>
+                    <br/>
+                </div>
+                <div class="form-group">
+                    <button class="btn btn-primary" data-ng-disabled="form.$invalid"
+                            data-ng-click="modifyPassword(pw2)">修改密码
+                    </button>
+                </div>
+                <div>
+                    <em>结果如下：</em><br/>
+                    <label id="result">{{result}}</label>
+                </div>
+            </fieldset>
+        </form>
+    </div>
+</section>

@@ -36,4 +36,12 @@
             <column name="last_modified_by" type="INT(11)"/>
         </createTable>
     </changeSet>
+    <changeSet id="initialize admin users" author="Barry">
+        <sql>
+            INSERT INTO `tbluser` (`id`, `email`, `name`, `pass_phrase`, `salt`, `failed_login_attempts`, `role`, `last_login`, `created_on`, `created_by`, `last_modified_on`, `last_modified_by`)
+            VALUES
+            (1, 'zhongdj@gmail.com', 'Barry', 'bb5094342acc81d41ab2e1fc60a3efae', '0bff4814-e50b-4202-88da-0ec752d4a467', NULL, 'admin', NULL, '2016-09-11 07:47:58', NULL, '2016-09-11 16:01:14', NULL),
+            (2, 'hailinglu@gmail.com', 'hailinglu', 'cddbabf341932e4e9c4caec651bdf490', '13982c64-6c51-4eec-96fb-18f6dde2538c', NULL, 'SystemAuditor', NULL, '2016-09-11 16:56:59', NULL, '2016-09-11 16:56:59', NULL);
+        </sql>
+    </changeSet>
 </databaseChangeLog>

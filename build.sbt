@@ -3,8 +3,11 @@ import com.github.sbtliquibase.SbtLiquibase
 import com.typesafe.sbt.digest.Import._
 import com.typesafe.sbt.rjs.Import._
 import com.typesafe.sbt.web.Import._
+import sbtdocker.ImageName
 
-name := """play-scala-slick-liquibase-angular-docker"""
+name := """playAngularSlickLiquibase"""
+
+organization := "zhongdj"
 
 version := "1.0-SNAPSHOT"
 
@@ -131,6 +134,17 @@ sources in (Compile,doc) := Seq.empty
 // exposing the play ports
 //dockerExposedPorts in Docker := Seq(9000, 9443)
 
+//imageNames in docker := Seq(
+//  // Sets the latest tag
+//  ImageName(s"zhongdj/playAngularSlickLiquibaseDocker:latest"),
+//
+//  // Sets a name with a tag that contains the project version
+//  ImageName(
+//    namespace = Some("zhongdj"),
+//    repository = "playAngularSlickLiquibaseDocker",
+//    tag = Some(version.value)
+//  )
+//)
 
 dockerfile in docker := {
   val appDir: File = stage.value
